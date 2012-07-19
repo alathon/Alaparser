@@ -1,0 +1,37 @@
+// DM Environment file for Alaparser.dme.
+// All manual changes should be made outside the BEGIN_ and END_ blocks.
+// New source code should be placed in .dm files: choose File/New --> Code File.
+
+// BEGIN_INTERNALS
+// END_INTERNALS
+
+// BEGIN_FILE_DIR
+#define FILE_DIR .
+#define FILE_DIR "commands"
+#define FILE_DIR "impl"
+#define FILE_DIR "matching"
+#define FILE_DIR "parsing"
+// END_FILE_DIR
+
+// BEGIN_PREFERENCES
+#define DEBUG
+// END_PREFERENCES
+
+#ifdef __MAIN__
+#include "test.dm"
+#endif
+
+// BEGIN_INCLUDE
+#include "test.dm"
+#include "utility.dm"
+#include "commands\Command.dm"
+#include "commands\ComponentGenerator.dm"
+#include "impl\Components.dm"
+#include "matching\Matcher.dm"
+#include "matching\MatcherComponent.dm"
+#include "matching\MatchResult.dm"
+#include "parsing\Parser.dm"
+#include "parsing\ParserInput.dm"
+#include "parsing\ParserOutput.dm"
+// END_INCLUDE
+
