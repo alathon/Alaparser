@@ -54,6 +54,60 @@ MatcherComponent
 			}
 		}
 
+// get sword from bag
+//
+
 	search
+		var
+			base_type;
+			SearchParameters/searchParams;
+
+		proc
+			findTarget(ParserInput/inp) {
+
+			}
+
+		match(ParserInput/inp) {
+			var/__targetRef/ref = findTarget(inp);
+			if(ref.target != null && istype(ref.target, src.base_type)) {
+				return _success(ref.tokensConsumed, ref.target);
+			} else {
+				return _failure();
+			}
+		}
+
+		clone() {
+			var/MatcherComponent/other = ..();
+			other.setCommandOptions("[src.searchParams.toText()]");
+			return other;
+		}
+
+
 		mob
+			_name = "mob";
+			base_type = /mob;
+
 		obj
+			_name = "obj";
+			base_type = /obj;
+
+SearchParameters
+	var
+		_source
+		_key
+		_extra
+
+	proc
+		toText() {
+			return "[_key],[_source],[_extra]";
+		}
+
+__targetRef
+	var
+		datum/target
+		tokensConsumed
+
+	New(datum/target, tokensConsumed) {
+		src.target = target;
+		src.tokensConsumed = tokensConsumed;
+	}

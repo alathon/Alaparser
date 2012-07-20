@@ -24,6 +24,7 @@ Matcher
 		}
 
 		_includeValue(MatcherComponent/comp) {
+			if(comp.getForceValue()) return TRUE;
 			if(comp.type in getIgnoredValueTypes()) return FALSE;
 			return TRUE;
 		}

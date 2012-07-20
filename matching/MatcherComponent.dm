@@ -1,5 +1,6 @@
 MatcherComponent
 	var
+		_forceValue = FALSE;
 		_name;
 		_required = TRUE;
 
@@ -20,6 +21,10 @@ MatcherComponent
 
 		_isRequired() {
 			return _required;
+		}
+
+		getForceValue() {
+			return src._forceValue;
 		}
 
 		getName() {
