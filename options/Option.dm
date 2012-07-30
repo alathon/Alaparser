@@ -15,13 +15,19 @@ Option/postfix/range
 
 		_isCorrectType(entry) {
 			for(var/typeVal in _types) {
-				if(istype(entry, typeVal)) return TRUE;
+				if(istype(entry, typeVal)) {
+					return TRUE;
+				}
 			}
 			return FALSE;
 		}
 
 		_generateTypes() {
-			src._types = __textToList(src._typeFilterStr, "|");
+			src._types = new();
+			var/list/entries = __textToList(src._typeFilterStr, "|");
+			for(var/a in entries) {
+				src._types += text2path("/[a]");
+			}
 		}
 
 		getListFromKey(client/C) {
@@ -37,7 +43,8 @@ Option/postfix/range
 		}
 
 		getPossibles(client/C) {
-			return _filterList(getListFromKey(C));
+			. = getListFromKey(C);
+			. = _filterList(.);
 		}
 
 	var

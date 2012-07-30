@@ -18,10 +18,9 @@ OptionParser
 			if(!left || !right || left > right || right < left) return L;
 
 			var/body = copytext(str, left+1, right);
-			var/list/bodyList = __textToList(body, " ");
-			if(length(bodyList) != 3) return L;
-			if(bodyList[2] != "in") return L;
-			L += new /Option/postfix/range(bodyList[1], bodyList[3]);
+			var/list/bodyList = __textToList(body, "@");
+			if(length(bodyList) != 2) return L;
+			L += new /Option/postfix/range(bodyList[1], bodyList[2]);
 		}
 
 		parse(str) {

@@ -54,14 +54,25 @@ MatcherComponent
 		}
 
 	search
+		New(list/opts) {
+			..(opts);
+			src._rangeOption = locate(/Option/postfix/range) in src._options;
+		}
+
 		_name = "search";
+		clone() {
+			var/MatcherComponent/search/other = ..();
+			other._rangeOption = src._rangeOption;
+			return other;
+		}
+
 		match(ParserInput/inp) {
-			var/list/possibles = src.rangeOption.getPossibles(inp.getSource());
+			var/list/possibles = src._rangeOption.getPossibles(inp.getSource());
 			return findTarget(inp, possibles);
 		}
 
 		var
-			Option/postfix/range/rangeOption;
+			Option/postfix/range/_rangeOption;
 
 		proc
 			_getEntryKeywords(entry) {

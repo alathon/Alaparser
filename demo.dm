@@ -8,7 +8,6 @@ client/Command(T) {
 }
 
 world/New() {
-	sleep(20);
 	alaparser = new();
 	generateComponents();
 }
@@ -28,11 +27,18 @@ proc/generateComponents() {
 }
 
 Command
+	testforced
+		format = "!testforce";
+
+		command(var/forced) {
+			world << "testforce: [forced]";
+		}
+
 	testoptional
 		format = "testopt; ?yahoo; word;"
 
-		command(var/word) {
-			world << "testopt: [word]";
+		command(var/yahoo, var/word) {
+			world << "testopt: [word] (yahoo: [yahoo])";
 		}
 
 	testword
@@ -63,7 +69,9 @@ Command
 			world << "testlit";
 		}
 
-	testmob
-		command() { }
-	testobj
-		command() { }
+	testclient
+		format = "testclient; search(client@clients)";
+
+		command(var/client/C) {
+			world << "Client: [C]";
+		}
