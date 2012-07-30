@@ -30,6 +30,8 @@ Matcher
 		}
 
 		match(ParserInput/inp) {
+			sleep(5);
+			var/origLength = length(inp.getTokens());
 			for(var/i = 1; i <= length(_matchers); i++) {
 				var/MatcherComponent/comp = _matchers[i];
 				if(!inp.getTokens() || !length(inp.getTokens())) {
@@ -40,20 +42,17 @@ Matcher
 				if(!result.isSuccessful()) {
 					if(!comp._isOptional()) {
 						return i;
+					} else {
+						continue;
 					}
 				} else {
 					if(_includeValue(comp)) _addValue(result.getValue());
 					_consumeTokens(inp.getTokens(), result.getTokenCount());
 				}
 			}
-			if(length(inp.getTokens())) return length(_matchers);
-			else return PARSE_SUCCESS;
-		}
 
-		matchersToText() {
-			for(var/MatcherComponent/comp in _matchers) {
-				. += "[comp.getName()]";
-			}
+			if(length(inp.getTokens())) return origLength - length(inp.getTokens());
+			else return PARSE_SUCCESS;
 		}
 
 		getIgnoredValueTypes() {

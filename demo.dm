@@ -2,10 +2,13 @@ client/Command(T) {
 	var/ParserOutput/out = mainParser.process(src, T);
 	if(!out.getSuccess()) {
 		src << "Huh?";
+		src << "Best fit for command: [out.getCommand()]";
+		src << "You matched [out.getTokenCount()] tokens";
 	}
 }
 
 world/New() {
+	sleep(20);
 	alaparser = new();
 	generateComponents();
 }
@@ -25,6 +28,13 @@ proc/generateComponents() {
 }
 
 Command
+	testoptional
+		format = "testopt; ?yahoo; word;"
+
+		command(var/word) {
+			world << "testopt: [word]";
+		}
+
 	testword
 		format = "testword; word;";
 

@@ -36,23 +36,21 @@ ComponentGenerator
 		}
 
 		_getEntryName(entry) {
-			var/left_brace = findtext(entry, "(");
-			if(left_brace == 0) {
-				return entry;
-			} else {
-				return copytext(entry,1,left_brace);
+			var/end = findtext(entry, "(");
+			if(end == 0) {
+				end = length(entry) + 1;
+			}
+
+			for(var/i = 1; i <= length(entry); i++) {
+				var/ascii = text2ascii(entry, i);
+				if((ascii >= 65 && ascii <= 90) || (ascii >= 97 && ascii <= 122)) {
+					return copytext(entry, i, end);
+				}
 			}
 		}
 
 		_getEntryOptions(entry) {
-			var/left_brace = findtext(entry, "(");
-			var/right_brace = findtext(entry, ")");
-			if(left_brace > 0 && right_brace > 0) {
-				var/optsText = copytext(entry, left_brace+1, right_brace);
-				return alaparser.optionParser.parse(optsText);
-			} else {
-				return null;
-			}
+			return alaparser.optionParser.parse(entry);
 		}
 
 		getMatcher(name, list/opts) {

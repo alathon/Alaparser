@@ -48,6 +48,7 @@ proc/__replaceText(str, replace, with) {
 
 
 proc/__textMatch(text, attempt, case = FALSE, partial = TRUE) {
+	world << "Trying to match [attempt] against [text]";
 	var/match = text;
 	if(!case) {
 		attempt = lowertext(attempt);

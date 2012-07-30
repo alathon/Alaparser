@@ -39,7 +39,9 @@ MatcherComponent
 		}
 
 		_isOptional() {
-			if(locate(/Option/prefix/optional) in src._options) return TRUE;
+			if(locate(/Option/prefix/optional) in src._options) {
+				return TRUE;
+			}
 			return FALSE;
 		}
 
@@ -50,8 +52,9 @@ MatcherComponent
 
 		clone() {
 			var/p = src.type;
-			var/MatcherComponent/other = new p(_options);
-			. = other;
+			var/MatcherComponent/other = new p();
+			other._options = src._options;
+			return other;
 		}
 
 		match(ParserInput/inp) {

@@ -31,7 +31,7 @@ MatcherComponent
 	literal
 		New(word, list/opts) {
 			src.word = word;
-			..();
+			..(opts);
 		}
 
 		_name = "literal";
