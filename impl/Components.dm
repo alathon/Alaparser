@@ -82,7 +82,7 @@ MatcherComponent
 				var/list/keywords = src._getEntryKeywords(entry);
 
 				for(var/word in keywords) {
-					if(__textMatch(word, attempt)) return TRUE;
+					if(__textMatch(word, attempt, src._isCaseSensitive(), src._isPartial())) return TRUE;
 				}
 				return FALSE;
 			}
