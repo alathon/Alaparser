@@ -8,6 +8,13 @@ client/Command(T) {
 }
 
 world/New() {
+	var/mob/One = new();
+	var/mob/SecondOne = new();
+	var/mob/Two = new();
+	One.name = "One";
+	SecondOne.name = "One";
+	Two.name = "Two";
+
 	alaparser = new();
 	generateComponents();
 }
@@ -67,6 +74,13 @@ Command
 
 		command(var/a) {
 			world << "testlit";
+		}
+
+	testmob
+		format = "testmob; search(mob@loc)";
+
+		command(var/mob/M) {
+			world << "You found [M]";
 		}
 
 	testclient
