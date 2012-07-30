@@ -65,6 +65,7 @@
 #include "utility.dm"
 #include "commands\Command.dm"
 #include "commands\ComponentGenerator.dm"
+#include "impl\Alaparser.dm"
 #include "impl\atom.dm"
 #include "impl\Components.dm"
 #include "matching\Matcher.dm"

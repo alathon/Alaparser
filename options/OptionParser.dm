@@ -21,7 +21,7 @@ OptionParser
 			var/list/bodyList = __textToList(body, " ");
 			if(length(bodyList) != 3) return L;
 			if(bodyList[2] != "in") return L;
-			L += new /Option/range(bodyList[1], bodyList[3]);
+			L += new /Option/postfix/range(bodyList[1], bodyList[3]);
 		}
 
 		parse(str) {
@@ -35,6 +35,7 @@ OptionParser
 				if("!") return new /Option/prefix/forceValue;
 				if("?") return new /Option/prefix/optional;
 				if("%") return new /Option/prefix/caseSensitive;
+				if("~") return new /Option/prefix/partial;
 				else return null;
 			}
 		}

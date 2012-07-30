@@ -2,8 +2,9 @@ Option/prefix
 	forceValue
 	optional
 	caseSensitive
+	partial
 
-Option/range
+Option/postfix/range
 	proc
 		_filterList(list/L) {
 			. = new /list();
@@ -24,7 +25,15 @@ Option/range
 		}
 
 		getListFromKey(client/C) {
-			return new /list();
+			. = new /list();
+			switch(_key) {
+				if("clients") {
+					for(var/client/cli) . += cli;
+				}
+				if("loc") {
+					for(var/atom/A in C.mob.loc) . += A;
+				}
+			}
 		}
 
 		getPossibles(client/C) {
@@ -41,22 +50,3 @@ Option/range
 		src._key = key;
 		_generateTypes();
 	}
-
-
-/*
-
-Prefix Options:
-
-MUST HAVE:
-! = Force value
-? = Optional (Will not fail on failed match)
-
-GOOD TO HAVE:
-% = Case sensitive match
-
-Range Options:
-
-mob|obj|turf|atom|area in X
-
-Where X is user-defined range
-*/

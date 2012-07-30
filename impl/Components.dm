@@ -2,7 +2,7 @@ MatcherComponent
 	any
 		_name = "any";
 		match(ParserInput/inp) {
-			return _success(length(inp.getTokens()), inp.getText());
+			return _success(length(inp.getTokens()), __listToText(inp.getTokens(), " "));
 		}
 
 	word
@@ -29,22 +29,24 @@ MatcherComponent
 		}
 
 	literal
+		New(word, list/opts) {
+			src.word = word;
+			..();
+		}
+
 		_name = "literal";
 		var
 			word
 
-		setCommandOptions(opts) {
-			src.word = opts;
-		}
-
 		clone() {
-			var/MatcherComponent/other = ..();
-			other.setCommandOptions(src.word);
+			var/MatcherComponent/literal/other = ..();
+			other.word = src.word;
 			return other;
 		}
 
 		match(ParserInput/inp) {
-			if(inp.getFirstToken() == word) {
+			var/text = inp.getFirstToken();
+			if(__textMatch(word, text, src._isCaseSensitive(), src._isPartial())) {
 				return _success(1, src.word);
 			} else {
 				return _failure();
@@ -59,7 +61,7 @@ MatcherComponent
 		}
 
 		var
-			Option/range/rangeOption;
+			Option/postfix/range/rangeOption;
 
 		proc
 			_getEntryKeywords(entry) {

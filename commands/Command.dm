@@ -5,7 +5,7 @@ Command
 		if(!src.format) return;
 
 		if(_auto_create == TRUE) {
-			src._setComponents(__componentGenerator._fromCommand(src));
+			src._setComponents(alaparser.generator._fromCommand(src));
 		}
 	}
 

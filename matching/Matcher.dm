@@ -24,7 +24,7 @@ Matcher
 		}
 
 		_includeValue(MatcherComponent/comp) {
-			if(comp.getForceValue()) return TRUE;
+			if(comp._isForcedValue()) return TRUE;
 			if(comp.type in getIgnoredValueTypes()) return FALSE;
 			return TRUE;
 		}
@@ -38,7 +38,7 @@ Matcher
 
 				var/MatchResult/result = comp.match(inp);
 				if(!result.isSuccessful()) {
-					if(comp._isRequired()) {
+					if(!comp._isOptional()) {
 						return i;
 					}
 				} else {

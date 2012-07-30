@@ -1,5 +1,3 @@
-var/ComponentGenerator/__componentGenerator;
-
 ComponentGenerator
 	New() {
 		_populateTypes();
@@ -25,24 +23,19 @@ ComponentGenerator
 			. = new /list();
 
 			for(var/entry in tokens) {
-				var/MatcherComponent/comp = _createMatcherComponent(entry);
+				var/MatcherComponent/comp = _getMatcherFromEntry(entry);
 				if(comp != null) . += comp;
 			}
 		}
 
 		_getMatcherFromEntry(entry) {
 			if(entry == "" || entry == null) return null;
-			var/type_path = _getTypePath(entry);
-			var/opts = _getEntryOptions(entry);
-			return getMatcher(type_path, opts);
+			var/name = _getEntryName(entry);
+			var/list/opts = _getEntryOptions(entry);
+			return getMatcher(name, opts);
 		}
 
-		_createMatcherComponent(str) {
-			var/MatcherComponent/comp = _getMatcherFromEntry(str);
-			return comp;
-		}
-
-		_getTypePath(entry) {
+		_getEntryName(entry) {
 			var/left_brace = findtext(entry, "(");
 			if(left_brace == 0) {
 				return entry;
@@ -55,21 +48,18 @@ ComponentGenerator
 			var/left_brace = findtext(entry, "(");
 			var/right_brace = findtext(entry, ")");
 			if(left_brace > 0 && right_brace > 0) {
-				return copytext(entry,left_brace+1,right_brace);
+				var/optsText = copytext(entry, left_brace+1, right_brace);
+				return alaparser.optionParser.parse(optsText);
 			} else {
 				return null;
 			}
 		}
 
-		getMatcher(type_path, opts) {
-			if(type_path in src._componentTypes) {
-				var/path = src._componentTypes[type_path];
-				var/MatcherComponent/out = new path();
-				if(opts != null) out.setCommandOptions(opts);
-				return out;
+		getMatcher(name, list/opts) {
+			if(name in src._componentTypes) {
+				var/path = src._componentTypes[name];
+				return new path(opts);
 			} else {
-				var/MatcherComponent/out = new /MatcherComponent/literal();
-				out.setCommandOptions(type_path);
-				return out;
+				return new /MatcherComponent/literal(name, opts);
 			}
 		}

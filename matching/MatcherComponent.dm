@@ -1,7 +1,10 @@
 MatcherComponent
+	New(list/opts) {
+		src._options = opts;
+	}
+
 	var
-		list/options = new /list();
-		_forceValue = FALSE;
+		list/_options = new /list();
 		_name;
 		_required = TRUE;
 
@@ -20,12 +23,24 @@ MatcherComponent
 			return result;
 		}
 
-		_isRequired() {
-			return _required;
+		_isCaseSensitive() {
+			if(locate(/Option/prefix/caseSensitive) in src._options) return TRUE;
+			return FALSE;
 		}
 
-		getForceValue() {
-			return src._forceValue;
+		_isPartial() {
+			if(locate(/Option/prefix/partial) in src._options) return TRUE;
+			return FALSE;
+		}
+
+		_isForcedValue() {
+			if(locate(/Option/prefix/forceValue) in src._options) return TRUE;
+			return FALSE;
+		}
+
+		_isOptional() {
+			if(locate(/Option/prefix/optional) in src._options) return TRUE;
+			return FALSE;
 		}
 
 		getName() {
@@ -33,11 +48,9 @@ MatcherComponent
 			else return _name;
 		}
 
-		setCommandOptions() { }
-
 		clone() {
 			var/p = src.type;
-			var/MatcherComponent/other = new p();
+			var/MatcherComponent/other = new p(_options);
 			. = other;
 		}
 

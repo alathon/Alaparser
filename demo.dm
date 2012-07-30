@@ -6,7 +6,7 @@ client/Command(T) {
 }
 
 world/New() {
-	__componentGenerator = new();
+	alaparser = new();
 	generateComponents();
 }
 
@@ -23,16 +23,6 @@ proc/generateComponents() {
 		}
 	}
 }
-
-Option/range
-	getListFromKey(client/C) {
-		. = new /list();
-		switch(_key) {
-			if("clients") {
-				for(var/client/cli) . += cli;
-			}
-		}
-	}
 
 Command
 	testword
