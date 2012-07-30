@@ -47,6 +47,20 @@ proc/__replaceText(str, replace, with) {
 }
 
 
+proc/__textMatch(text, attempt, case = FALSE, partial = TRUE) {
+	var/match = text;
+	if(!case) {
+		attempt = lowertext(attempt);
+		match = lowertext(match);
+	}
+
+	if(partial) return (attempt == match || copytext(match, 1, length(attempt)+1) == attempt);
+	else return (attempt == match);
+}
+
+proc/__isTextNum(n) {
+	return ("[text2num(n)]" == "[n]");
+}
 
 /* DEBUGGING
 proc/iterateListElements(list/L) {

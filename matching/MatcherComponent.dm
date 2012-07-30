@@ -1,5 +1,6 @@
 MatcherComponent
 	var
+		list/options = new /list();
 		_forceValue = FALSE;
 		_name;
 		_required = TRUE;

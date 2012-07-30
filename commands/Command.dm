@@ -5,8 +5,7 @@ Command
 		if(!src.format) return;
 
 		if(_auto_create == TRUE) {
-			var/ComponentGenerator/gen = new /ComponentGenerator();
-			src._setComponents(gen._fromCommand(src));
+			src._setComponents(__componentGenerator._fromCommand(src));
 		}
 	}
 

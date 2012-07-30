@@ -8,8 +8,7 @@ MatcherComponent
 	word
 		_name = "word";
 		match(ParserInput/inp) {
-			var/list/tokens = inp.getTokens();
-			var/str = tokens[1]
+			var/str = inp.getFirstToken();
 			if(length("[text2num(str)]") == length(str)) {
 				return _failure();
 			} else {
@@ -20,8 +19,7 @@ MatcherComponent
 	num
 		_name = "num";
 		match(ParserInput/inp) {
-			var/list/tokens = inp.getTokens();
-			var/str = tokens[1]
+			var/str = inp.getFirstToken();
 			var/numstr = text2num(str);
 			if(length("[numstr]") != length(str)) {
 				return _failure();
@@ -46,68 +44,73 @@ MatcherComponent
 		}
 
 		match(ParserInput/inp) {
-			var/list/tokens = inp.getTokens();
-			if(tokens[1] == word) {
+			if(inp.getFirstToken() == word) {
 				return _success(1, src.word);
 			} else {
 				return _failure();
 			}
 		}
 
-// get sword from bag
-//
-
 	search
+		_name = "search";
+		match(ParserInput/inp) {
+			var/list/possibles = src.rangeOption.getPossibles(inp.getSource());
+			return findTarget(inp, possibles);
+		}
+
 		var
-			base_type;
-			SearchParameters/searchParams;
+			Option/range/rangeOption;
 
 		proc
-			findTarget(ParserInput/inp) {
-
+			_getEntryKeywords(entry) {
+				if(istype(entry, /client)) {
+					var/client/E = entry;
+					return E.getMatchKeywords();
+				} else {
+					switch(entry:type) {
+						if(/atom) {
+							var/atom/E = entry;
+							return E.getMatchKeywords();
+						}
+					}
+				}
 			}
 
-		match(ParserInput/inp) {
-			var/__targetRef/ref = findTarget(inp);
-			if(ref.target != null && istype(ref.target, src.base_type)) {
-				return _success(ref.tokensConsumed, ref.target);
-			} else {
-				return _failure();
+			isMatch(entry, attempt) {
+				var/list/keywords = src._getEntryKeywords(entry);
+
+				for(var/word in keywords) {
+					if(__textMatch(word, attempt)) return TRUE;
+				}
+				return FALSE;
 			}
-		}
 
-		clone() {
-			var/MatcherComponent/other = ..();
-			other.setCommandOptions("[src.searchParams.toText()]");
-			return other;
-		}
+			chopMatchNumber(text) {
+				var/dot = findtext(text, ".");
+				if(dot != 0) {
+					var/first = copytext(text, 1, dot);
+					if(__isTextNum(first)) {
+						text = copytext(text, dot+1);
+						return text2num(first);
+					}
+				}
+				return 1;
+			}
 
+			findTarget(ParserInput/inp, list/possibles) {
+				var/attempt = inp.getFirstToken();
+				var/matchNumber = chopMatchNumber(attempt);
+				var/match = null;
+				for(var/entry in possibles) {
+					if(isMatch(entry, attempt)) {
+						match = entry;
+						if(--matchNumber == 0) break;
+					}
+				}
 
-		mob
-			_name = "mob";
-			base_type = /mob;
-
-		obj
-			_name = "obj";
-			base_type = /obj;
-
-SearchParameters
-	var
-		_source
-		_key
-		_extra
-
-	proc
-		toText() {
-			return "[_key],[_source],[_extra]";
-		}
-
-__targetRef
-	var
-		datum/target
-		tokensConsumed
-
-	New(datum/target, tokensConsumed) {
-		src.target = target;
-		src.tokensConsumed = tokensConsumed;
-	}
+				if(match != null) {
+					return _success(1, match);
+				} else {
+					return _failure();
+				}
+			}

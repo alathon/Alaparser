@@ -1,4 +1,3 @@
-
 client/Command(T) {
 	var/ParserOutput/out = mainParser.process(src, T);
 	if(!out.getSuccess()) {
@@ -7,6 +6,7 @@ client/Command(T) {
 }
 
 world/New() {
+	__componentGenerator = new();
 	generateComponents();
 }
 
@@ -23,6 +23,16 @@ proc/generateComponents() {
 		}
 	}
 }
+
+Option/range
+	getListFromKey(client/C) {
+		. = new /list();
+		switch(_key) {
+			if("clients") {
+				for(var/client/cli) . += cli;
+			}
+		}
+	}
 
 Command
 	testword
@@ -43,7 +53,7 @@ Command
 		format = "testnum; num;";
 
 		command(var/num) {
-			world << "testnum: [num] (isNumber: [isnum(num)]";
+			world << "testnum: [num]";
 		}
 
 	testlit

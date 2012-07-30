@@ -15,6 +15,10 @@ ParserInput
 			return src._rawText;
 		}
 
+		getFirstToken() {
+			return src._tokens[1];
+		}
+
 		getTokens() {
 			return src._tokens;
 		}
