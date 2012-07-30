@@ -15,8 +15,8 @@ Command
 		list/_components;
 
 	proc
-		_go(var/Matcher/match) {
-			var/list/arguments = match._getValues();
+		_go(client/C, var/Matcher/match) {
+			var/list/arguments = list(C) + match._getValues();
 			if(length(arguments) > 0) {
 				call(src,"command")(arglist(arguments));
 			} else {

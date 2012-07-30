@@ -29,7 +29,7 @@ Parser
 				var/Matcher/matcher = new /Matcher(cmd);
 				var/tokensParsed = matcher.match(clientInput);
 				if(tokensParsed == PARSE_SUCCESS) {
-					cmd._go(matcher);
+					cmd._go(c, matcher);
 					postprocess(c,str,matcher);
 					var/ParserOutput/out = new();
 					out.setClient(c);

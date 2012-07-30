@@ -81,7 +81,7 @@ MatcherComponent
 					return E.getMatchKeywords();
 				} else {
 					switch(entry:type) {
-						if(/atom) {
+						if(/atom, /mob, /obj, /turf, /area) {
 							var/atom/E = entry;
 							return E.getMatchKeywords();
 						}
@@ -99,21 +99,23 @@ MatcherComponent
 			}
 
 			chopMatchNumber(text) {
-				var/dot = findtext(text, ".");
-				if(dot != 0) {
-					var/first = copytext(text, 1, dot);
-					if(__isTextNum(first)) {
-						text = copytext(text, dot+1);
-						return text2num(first);
-					}
-				}
+
 				return 1;
 			}
 
 			findTarget(ParserInput/inp, list/possibles) {
 				var/attempt = inp.getFirstToken();
-				var/matchNumber = chopMatchNumber(attempt);
 				var/match = null;
+				var/dot = findtext(attempt, ".");
+				var/matchNumber = 1;
+				if(dot != 0) {
+					var/first = copytext(attempt, 1, dot);
+					if(__isTextNum(first)) {
+						attempt = copytext(attempt, dot+1);
+						matchNumber = text2num(first);
+					}
+				}
+
 				for(var/entry in possibles) {
 					if(isMatch(entry, attempt)) {
 						match = entry;
@@ -121,7 +123,7 @@ MatcherComponent
 					}
 				}
 
-				if(match != null) {
+				if(match != null && matchNumber == 0) {
 					return _success(1, match);
 				} else {
 					return _failure();

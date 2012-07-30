@@ -48,7 +48,6 @@ proc/__replaceText(str, replace, with) {
 
 
 proc/__textMatch(text, attempt, case = FALSE, partial = TRUE) {
-	world << "Trying to match [attempt] against [text]";
 	var/match = text;
 	if(!case) {
 		attempt = lowertext(attempt);
@@ -62,46 +61,3 @@ proc/__textMatch(text, attempt, case = FALSE, partial = TRUE) {
 proc/__isTextNum(n) {
 	return ("[text2num(n)]" == "[n]");
 }
-
-/* DEBUGGING
-proc/iterateListElements(list/L) {
-	for(var/a in L) {
-		. += "\[[a]\]";
-	}
-}
-
-mob/verb/TestListToText() {
-	var/str1 = list("", "hi", "there", "");
-	var/str2 = list("hi  ","   there");
-	var/str3 = list("", "", "");
-	var/delim = ";"
-	world << "List1 skip empty: [__listToText(str1, delim, TRUE)]";
-	world << "List1 don't skip empty: [__listToText(str1, delim, FALSE)]";
-	world << "List2 skip empty: [__listToText(str2, delim, TRUE)]";
-	world << "List2 don't skip empty: [__listToText(str2, delim, FALSE)]";
-	world << "List3 skip empty: [__listToText(str3, delim, TRUE)]";
-	world << "List3 don't skip empty: [__listToText(str3, delim, FALSE)]";
-}
-
-mob/verb/TestTextToList() {
-	var/str1 = ";hi;there;";
-	var/str2 = "hi  ;   there";
-	var/str3 = ";;;";
-	var/delim = ";"
-	world << "Str1\[[str1]\] skip empty: [iterateListElements(__textToList(str1, delim, TRUE))]";
-	world << "Str1\[[str1]\] don't skip empty: [iterateListElements(__textToList(str1, delim, FALSE))]";
-	world << "Str2\[[str2]\] skip empty: [iterateListElements(__textToList(str2, delim, TRUE))]";
-	world << "Str2\[[str2]\] don't skip empty: [iterateListElements(__textToList(str2, delim, FALSE))]";
-	world << "Str3\[[str3]\] skip empty: [iterateListElements(__textToList(str3, delim, TRUE))]";
-	world << "Str4\[[str3]\] don't skip empty: [iterateListElements(__textToList(str3, delim, FALSE))]";
-}
-
-mob/verb/TestReplace() {
-	var/str1 = ";hi;there;";
-	var/str2 = "hi  ;   there";
-	var/str3 = ";;;";
-	world << "Str1\[[str1]\]: [__replaceText(str1, ";", "'")]";
-	world << "Str2\[[str2]\]: [__replaceText(str2, ";", "'")]";
-	world << "Str3\[[str3]\]: [__replaceText(str3, ";", "'")]";
-}
-*/

@@ -8,6 +8,7 @@
 // BEGIN_FILE_DIR
 #define FILE_DIR .
 #define FILE_DIR "commands"
+#define FILE_DIR "demo"
 #define FILE_DIR "impl"
 #define FILE_DIR "matching"
 #define FILE_DIR "options"
@@ -36,5 +37,7 @@
 // END_INCLUDE
 
 #ifdef __MAIN__
-#include "demo.dm"
+#include "demo/demo_commands.dm"
+#include "demo/init.dm"
+#include "demo/world.dm"
 #endif
