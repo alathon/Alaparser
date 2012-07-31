@@ -90,6 +90,10 @@ Matcher
 			return TRUE;
 		}
 
+		getCommand() {
+			return src._parent;
+		}
+
 		getIgnoredValueTypes() {
 			. = new /list();
 			. += /MatcherComponent/literal;

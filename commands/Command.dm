@@ -16,6 +16,13 @@ Command
 		list/_components;
 
 	proc
+		preprocess(client/C) {
+			return TRUE;
+		}
+
+		postprocess(client/C) {
+		}
+
 		_go(client/C, var/Matcher/match) {
 			var/list/arguments = list(C) + match._getValues();
 			if(length(arguments) > 0) {

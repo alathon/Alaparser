@@ -14,13 +14,19 @@ Parser
 		}
 
 		preprocess(client/c, str) {
+			return TRUE;
 		}
 
 		postprocess(client/c, str, Matcher/match) {
 		}
 
 		process(client/c, str) {
-			src.preprocess(c,str);
+			if(!src.preprocess(c,str)) {
+				var/ParserOutput/out = new();
+				out.setSuccess(FALSE);
+				return out;
+			}
+
 			var/list/tokens = src._tokenize(str);
 			var/Matcher/leadingMatcher;
 			var/list/winners = new /list();
@@ -41,14 +47,16 @@ Parser
 			if(!bestMatcher) bestMatcher = leadingMatcher;
 
 			var/ParserOutput/out = new();
-			if(bestMatcher._isSuccessful()) {
+			var/Command/cmd = bestMatcher.getCommand();
+			if(bestMatcher._isSuccessful() && cmd.preprocess(c)) {
 				bestMatcher._parent._go(c, bestMatcher);
 				out.setSuccess(TRUE);
 			} else {
 				out.setSuccess(FALSE);
 			}
 			out.setMatcher(bestMatcher);
-			postprocess(c, str, bestMatcher);
+			cmd.postprocess(c);
+			src.postprocess(c, str, bestMatcher);
 			return out;
 		}
 
