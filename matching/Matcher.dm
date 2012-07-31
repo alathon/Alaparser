@@ -65,6 +65,7 @@ Matcher
 					if(!comp._isOptional()) {
 						return FALSE;
 					} else {
+						_addValue(null);
 						continue;
 					}
 				}
@@ -74,6 +75,7 @@ Matcher
 					if(!comp._isOptional()) {
 						return FALSE;
 					} else {
+						_addValue(null);
 						continue;
 					}
 				} else {

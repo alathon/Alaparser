@@ -1,3 +1,4 @@
+
 Command
 	New() {
 		format = __replaceText(format," ","");

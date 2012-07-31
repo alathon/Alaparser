@@ -26,7 +26,6 @@ Option/postfix/range
 			src._types = new();
 			var/list/entries = __textToList(src._typeFilterStr, "|");
 			for(var/a in entries) {
-				if(copytext(a, 1, 2) == "/") a = copytext(a, 2); // Strip initial /
 				src._types += text2path("/[a]");
 			}
 		}
