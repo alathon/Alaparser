@@ -32,7 +32,10 @@
 // END_INCLUDE
 
 #ifdef __MAIN__
-#include "demo/demo_commands.dm"
+#include "demo/commands.dm"
 #include "demo/init.dm"
+#include "demo/world.dm"
+#include "demo/parser.dm"
+#include "demo/rangeOption.dm"
 #include "demo/world.dm"
 #endif

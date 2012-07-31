@@ -13,14 +13,16 @@ What is Alaparser?|
 -------------------
 
 Alaparser is a command parser, primarily aimed towards text-based games. It allows you to define
-a structure for how correct input to a command should look, and have the library enforce some or
-most of it for you. This takes care of things like where to look for mobs, optional arguments, looking
-for the 2nd thing by a certain name, and so on.
+commands that players can run, and a structure for how correct input to a command should look.
+This takes care of things like where to look for mobs, optional arguments, looking
+for the 2nd thing by a certain name, and so on. These things are normally handled by commands themselves,
+which leads to a huge number of repeat-code, the potential for errors, and different commands handling the
+same thing in different ways. Bad!
 
 What is a parser in this case?|
 -------------------------
 
-A Parser is this library is a datum that can receive input from a client, and will look for viable commands that match
+A Parser in this library is a datum that can receive input from a client, and will look for viable commands that match
 the input. If it finds one, it will execute the command. Adding commands to a parser is much the same as adding verbs to
 a mob, in that if you don't add a command to a parser, it won't be able to run that command. You can also have any number
 of parsers, and you can attach them to players, or have them be globally accessible, or what have you.
@@ -68,7 +70,8 @@ Command
 
 Here, we specify that in order to call the who command, you must type in 'who'.
 Anything not a special keyword is considered a 'text literal' by the Parser, which
-means you have to type that word for it to match.
+means you have to type that word for it to match. The command() proc is always passed
+the calling client as the first argument.
 
 Or it can be more complex, like here:
 
@@ -94,11 +97,18 @@ the command() proc starts by checking whether you decided to give it a mob or no
 
 'search' is a special match type, that requires you to tell it what to search for (mob in this case), and where to do so (loc),
 separated by a @. So the above lets you either type look to look at a room, or type look and then something matching a mob in your
-current location, to look at that thing.
+current location, to look at that thing. More on search under 'How does Search work'.
 
 The demo provides uses of each special match type (num, any, word, search), and demonstrates all of the prefix symbols that allow you
-to make things optional(?), allow partial matches (~), force a literal to get sent to command(!) and more.
+to make things optional(?), allow partial matches (~), force a literal to get sent to command(!) and force a case-sensitive match (%).
 
+How does Search Work|
+---------------------
+
+The 'search' match type is /MatcherComponent/search, and utilizes a special option called /Option/postfix/range, which is what you can see
+inside the () braces, telling it where to look and what to look for. In order to add new places to look besides the two pre-defined 'clients' and 'loc',
+you must override Option/postfix/range.getListFromKey(client/C), to return the appropriate list based on the _key value of the option. See the existing
+implementation
 Things of note|
 ---------------
 
@@ -106,7 +116,7 @@ Things of note|
 of single-word keywords that identify the datum. By default, atoms return a list with their name in it, and clients a list with their key.
 You might want to f.ex do this, if you want to match mobs by one of many keywords.
 
-- The parser doesn't explicitly expect the first part of a command to be a literal, but it probably should be.
+- The parser doesn't explicitly expect the first part of a command to be a literal, but it probably should be. When deciding between
 
 Procedures you can override|
 ----------------------------
