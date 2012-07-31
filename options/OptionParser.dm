@@ -1,13 +1,12 @@
 OptionParser
 	proc
 		_parsePrefix(list/L, str) {
-			var/i = 1;
-			while(length(str)) {
-				var/next = copytext(str, i, i+1);
-				var/Option/opt = src._getPrefixOption(next);
-				if(opt == null) break;
+			for(var/i = 1; i <= length(str); i++) {
+				var/char = text2ascii(str, i);
+				if(__isAlpha(char)) break;
+				var/Option/opt = src._getPrefixOption(char);
+				if(opt == null) continue;
 				else L += opt;
-				if(++i > length(str)) break;
 			}
 			return L;
 		}
@@ -30,7 +29,7 @@ OptionParser
 		}
 
 		_getPrefixOption(t) {
-			switch(t) {
+			switch(ascii2text(t)) {
 				if("!") return new /Option/prefix/forceValue;
 				if("?") return new /Option/prefix/optional;
 				if("%") return new /Option/prefix/caseSensitive;

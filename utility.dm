@@ -53,6 +53,10 @@ proc/__textMatch(text, attempt, case = FALSE, partial = TRUE) {
 	else return (attempt == match);
 }
 
+proc/__isAlpha(ascii) {
+	return ((ascii >= 65 && ascii <= 90) || (ascii >= 97 && ascii <= 122))
+}
+
 proc/__isTextNum(n) {
 	return ("[text2num(n)]" == "[n]");
 }

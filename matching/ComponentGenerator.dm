@@ -43,7 +43,7 @@ ComponentGenerator
 
 			for(var/i = 1; i <= length(entry); i++) {
 				var/ascii = text2ascii(entry, i);
-				if((ascii >= 65 && ascii <= 90) || (ascii >= 97 && ascii <= 122)) {
+				if(__isAlpha(ascii)) {
 					return copytext(entry, i, end);
 				}
 			}
