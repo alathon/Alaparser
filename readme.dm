@@ -52,13 +52,14 @@ Commands are made up of two parts:
 	- The command() proc, called when a command is successfully matched.
 
 The format text string is made up of parts. Each part is separated by a ; and represents usually a single
-word you want to match.
+word you want to match. Each part can be prefixed by one of the prefix options (!, %, ~ and ?), and can
+potentially have a suffix encased in () brackets.
 
 The format can be simple, like in the following command:
 
 Command
 	who
-		format = "who";
+		format = "~who";
 
 		command(client/C) {
 			C << "----------\n";
@@ -70,10 +71,14 @@ Command
 
 Here, we specify that in order to call the who command, you must type in 'who'.
 Anything not a special keyword is considered a 'text literal' by the Parser, which
-means you have to type that word for it to match. The command() proc is always passed
-the calling client as the first argument.
+means you have to type that word for it to match. In addition, because we specified
+the ~ prefix option (Called the partial option), we could also type 'w', or 'wh'.
 
-Or it can be more complex, like here:
+The command() proc is always passed the calling client as the first argument. Normally,
+every part of a command is sent to the command() proc as an argument, but by default
+literals (Such as the above) are not.
+
+The format can also be more complex, like here:
 
 Command
 	look
@@ -91,16 +96,17 @@ Command
 		}
 
 The above supports a relatively standard 'look' command from a MUD. Remember that each 'part'
-of the command is separated by a ;. The squiggly ~ before look tells the Parser that you can type l, lo, loo or look
+of the command is separated by a ;. Again we use ~ to indicate that the client can type l, lo, loo or look
 to match that word. The ? before search tells it that you can omit this second argument, if you so desire. This is why
-the command() proc starts by checking whether you decided to give it a mob or not.
+the command() proc starts by checking whether you decided to give it a mob or not. Search is also prefixed by ~, meaning that
+you can type in the partial name of a mob to match it.
 
 'search' is a special match type, that requires you to tell it what to search for (mob in this case), and where to do so (loc),
 separated by a @. So the above lets you either type look to look at a room, or type look and then something matching a mob in your
 current location, to look at that thing. More on search under 'How does Search work'.
 
 The demo provides uses of each special match type (num, any, word, search), and demonstrates all of the prefix symbols that allow you
-to make things optional(?), allow partial matches (~), force a literal to get sent to command(!) and force a case-sensitive match (%).
+to make things optional(?), allow partial matches (~), force a value to get sent to command(!) and force a case-sensitive match (%).
 
 How does Search Work|
 ---------------------
@@ -108,34 +114,33 @@ How does Search Work|
 The 'search' match type is /MatcherComponent/search, and utilizes a special option called /Option/postfix/range, which is what you can see
 inside the () braces, telling it where to look and what to look for. In order to add new places to look besides the two pre-defined 'clients' and 'loc',
 you must override Option/postfix/range.getListFromKey(client/C), to return the appropriate list based on the _key value of the option. See the existing
-implementation
+implementation for an example of how to do that.
+
+The basic format of the range option after the search keyword is (type@key) where key must be matched in getListFromKey(), and type must be a valid type-path,
+without the initial /. If you only wanted to search for /mob/evil f.ex, you could use mob/evil as the type.
+
+
 Things of note|
 ---------------
+- The parser doesn't explicitly expect the first matcher component of a command to be a literal, but it probably should be. When deciding between commands that all match
+the input, it will prioritize non-first literals, or commands that don't have a partial first literal (A literal with a ~). If no match can be found like that,
+it will pick the shortest first-literal matched.
 
-- If you want to change how the search match type matches a datum, you must override datum.getMatchKeywords(), which should return a /list
-of single-word keywords that identify the datum. By default, atoms return a list with their name in it, and clients a list with their key.
-You might want to f.ex do this, if you want to match mobs by one of many keywords.
+- Matching occurs in a greedy fashion. If an optional can be matched, it will. If it can't, it will simply be skipped.
 
-- The parser doesn't explicitly expect the first part of a command to be a literal, but it probably should be. When deciding between
+- The 'any' matcher will swallow all subsequent input. Any matcher after an any makes no sense, and will cause the command to fail.
 
-Procedures you can override|
-----------------------------
-Matcher.getIgnoredValueTypes():
+- By default, literals (/MatcherComponent/literal) will not send their matched value to command(). This is the normal behavior.
+You can get around this with the force-value prefix (!), but you can also modify the list of ignored value matcher components, by
+overriding Matcher.getIgnoredValueTypes(). The procedure will return a list with just the /MatcherComponent/literal type in it by
+default.
 
-	This proc should return a /list of type-paths of MatcherComponent datums, which by default
-	will not add their matched value to what is sent to Command.command(). By default, literals
-	are returned from this proc.
-
-Option/postfix/range.getListFromKey(client/C):
-
-	This proc controls which 'lists' you can search for datums in, through the search match type.
-	There are two pre-defined lists, namely 'clients' and 'loc'. You can see how they are used in
-	the demo commands, or check out the original definition of getListFromKey() in options/Option.dm.
-
+- In general, proc names prefixed by a _ shouldn't be overridden / used by you, and are internal to the library.
 
 Documentation TODO:
 
 - How command options are parsed.
 - How to add new option prefixes.
 - How to add new matcher components.
+- More examples.
 */
