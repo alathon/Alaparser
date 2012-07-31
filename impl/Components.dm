@@ -2,7 +2,7 @@ MatcherComponent
 	any
 		_name = "any";
 		match(ParserInput/inp) {
-			return _success(length(inp.getTokens()), __listToText(inp.getTokens(), " "));
+			return src._success(length(inp.getTokens()), __listToText(inp.getTokens(), " "));
 		}
 
 	word
@@ -10,9 +10,9 @@ MatcherComponent
 		match(ParserInput/inp) {
 			var/str = inp.getFirstToken();
 			if(length("[text2num(str)]") == length(str)) {
-				return _failure();
+				return src._failure();
 			} else {
-				return _success(1, str);
+				return src._success(1, str);
 			}
 		}
 
@@ -22,9 +22,9 @@ MatcherComponent
 			var/str = inp.getFirstToken();
 			var/numstr = text2num(str);
 			if(length("[numstr]") != length(str)) {
-				return _failure();
+				return src._failure();
 			} else {
-				return _success(1, numstr);
+				return src._success(1, numstr);
 			}
 		}
 
@@ -47,9 +47,9 @@ MatcherComponent
 		match(ParserInput/inp) {
 			var/text = inp.getFirstToken();
 			if(__textMatch(word, text, src._isCaseSensitive(), src._isPartial())) {
-				return _success(1, src.word);
+				return src._success(1, src.word);
 			} else {
-				return _failure();
+				return src._failure();
 			}
 		}
 
@@ -67,7 +67,7 @@ MatcherComponent
 		}
 
 		match(ParserInput/inp) {
-			var/list/possibles = src._rangeOption.getPossibles(inp.getSource());
+			var/list/possibles = src._rangeOption._getPossibles(inp.getSource());
 			return findTarget(inp, possibles);
 		}
 
@@ -76,17 +76,7 @@ MatcherComponent
 
 		proc
 			_getEntryKeywords(entry) {
-				if(istype(entry, /client)) {
-					var/client/E = entry;
-					return E.getMatchKeywords();
-				} else {
-					switch(entry:type) {
-						if(/atom, /mob, /obj, /turf, /area) {
-							var/atom/E = entry;
-							return E.getMatchKeywords();
-						}
-					}
-				}
+				return entry:getMatchKeywords();
 			}
 
 			isMatch(entry, attempt) {
@@ -96,11 +86,6 @@ MatcherComponent
 					if(__textMatch(word, attempt, src._isCaseSensitive(), src._isPartial())) return TRUE;
 				}
 				return FALSE;
-			}
-
-			chopMatchNumber(text) {
-
-				return 1;
 			}
 
 			findTarget(ParserInput/inp, list/possibles) {
@@ -117,15 +102,15 @@ MatcherComponent
 				}
 
 				for(var/entry in possibles) {
-					if(isMatch(entry, attempt)) {
+					if(src.isMatch(entry, attempt)) {
 						match = entry;
 						if(--matchNumber == 0) break;
 					}
 				}
 
 				if(match != null && matchNumber == 0) {
-					return _success(1, match);
+					return src._success(1, match);
 				} else {
-					return _failure();
+					return src._failure();
 				}
 			}

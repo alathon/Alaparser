@@ -2,21 +2,15 @@
 // and has the default option of skipping empty additions.
 proc/__textToList(str, delim = ";", skip_empty = TRUE) {
 	if(!str) {
-		//world << "No str";
 		return new /list();
 	}
 
-	//world << "textToList for [str]";
 	var/next = findtext(str, delim);
 	var/last = 0;
-	. = new /list();
-	//world << "skipEmpty = [skip_empty]";
+	. = new /list();;
 	while(next != 0) {
-		//world << "next = [next]";
 		var/txt = copytext(str, last+1, next);
-		//world << "txt = [txt]";
 		if(skip_empty == FALSE || txt) {
-			//world << "Adding [txt]";
 			. += txt;
 		}
 		last = next;

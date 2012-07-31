@@ -1,18 +1,24 @@
 Matcher
-	New(Command/cmd) {
+	New(Command/cmd, ParserInput/inp) {
 		src._matchers = cmd._getComponents();
 		src._values = new /list();
 		src._parent = cmd;
+		src._clientInput = inp;
 	}
 
 	var
 		list/_matchers;
+		_tokensMatched = 0;
+		_success = FALSE;
 		list/_values;
+		ParserInput/_clientInput;
 		Command/_parent;
 
 	proc
-		_consumeTokens(list/tokens, n) {
+		_consumeTokens(n) {
+			var/list/tokens = src._clientInput.getTokens();
 			tokens.Cut(1,1+n);
+			_tokensMatched += n;
 		}
 
 		_addValue(val) {
@@ -29,54 +35,64 @@ Matcher
 			return TRUE;
 		}
 
-		_debug(ParserInput/inp) {
-			world << "Trying to match command [_parent] with format [_parent.format]";
-			world << "# of Components: [length(_matchers)]";
-			for(var/MatcherComponent/comp in _matchers) {
-				_debugComp(comp);
-			}
-			world << "Client input: [inp.getText()]";
+		_getTokensMatched() {
+			return _tokensMatched;
 		}
 
-		_debugComp(MatcherComponent/comp) {
-			world << "\tComponent type: [comp.type]";
-			if(length(comp._options)) {
-				world << "\tComponent options: [__listToText(comp._options)]";
-			} else {
-				world << "\tComponent has no options.";
+		_getFirstMatchStrength() {
+			var/MatcherComponent/first = src._matchers[1];
+			if(!first._isPartial()) return 100;
+
+			if(istype(first, /MatcherComponent/literal)) {
+				var/MatcherComponent/literal/lit = first;
+				return 100 - length(lit.word);
 			}
+			return 100;
 		}
 
-		match(ParserInput/inp) {
-			var/origLength = length(inp.getTokens());
+		_isSuccessful() {
+			return src._success;
+		}
+
+		_hasTokensLeft() {
+			return (src._clientInput.getTokens() && length(src._clientInput.getTokens()));
+		}
+
+		_match() {
 			for(var/i = 1; i <= length(_matchers); i++) {
 				var/MatcherComponent/comp = _matchers[i];
-				if(!inp.getTokens() || !length(inp.getTokens())) {
+				if(!_hasTokensLeft()) {
 					if(!comp._isOptional()) {
-						return i;
+						return FALSE;
 					} else {
 						continue;
 					}
 				}
 
-				var/MatchResult/result = comp.match(inp);
-				if(!result.isSuccessful()) {
+				comp.match(src._clientInput);
+				if(!comp.isSuccessful()) {
 					if(!comp._isOptional()) {
-						return i;
+						return FALSE;
 					} else {
 						continue;
 					}
 				} else {
-					if(_includeValue(comp)) _addValue(result.getValue());
-					_consumeTokens(inp.getTokens(), result.getTokenCount());
+					if(_includeValue(comp)) _addValue(comp.getValue());
+					_consumeTokens(comp.getTokenCount());
 				}
+
 			}
 
-			if(length(inp.getTokens())) return origLength - length(inp.getTokens());
-			else return PARSE_SUCCESS;
+			if(length(src._clientInput.getTokens())) return FALSE;
+			src._success = TRUE;
+			return TRUE;
 		}
 
 		getIgnoredValueTypes() {
 			. = new /list();
 			. += /MatcherComponent/literal;
 		}
+
+MatcherResult
+	var
+		list/componentResults;

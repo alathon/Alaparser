@@ -20,39 +20,44 @@ Parser
 		}
 
 		process(client/c, str) {
-			preprocess(c,str);
-			var/list/tokens = _tokenize(str);
-			var/ParserInput/clientInput = new /ParserInput(str, tokens.Copy(), c);
-			var/Command/bestCmd = null;
-			var/tokenCount = 0;
+			src.preprocess(c,str);
+			var/list/tokens = src._tokenize(str);
+			var/Matcher/leadingMatcher;
+			var/list/winners = new /list();
+
 			for(var/Command/cmd in commands) {
-				var/Matcher/matcher = new /Matcher(cmd);
-				var/tokensParsed = matcher.match(clientInput);
-				if(tokensParsed == PARSE_SUCCESS) {
-					cmd._go(c, matcher);
-					postprocess(c,str,matcher);
-					var/ParserOutput/out = new();
-					out.setClient(c);
-					out.setInputText(str);
-					out.setTokens(tokens);
-					out.setCommand(cmd);
-					out.setTokenCount(length(tokens));
-					out.setSuccess(TRUE);
-					return out;
+				var/ParserInput/clientInput = new /ParserInput(str, tokens.Copy(), c);
+				var/Matcher/matcher = new /Matcher(cmd, clientInput);
+				if(matcher._match()) {
+					winners += matcher;
 				} else {
-					if(bestCmd == null || tokensParsed > tokenCount) {
-						bestCmd = cmd;
-						tokenCount = tokensParsed;
+					if(leadingMatcher == null || matcher._getTokensMatched() > leadingMatcher._getTokensMatched()) {
+						leadingMatcher = matcher;
 					}
 				}
 			}
 
-			var/ParserOutput/state = new();
-			state.setClient(c);
-			state.setInputText(str);
-			state.setTokens(tokens);
-			state.setCommand(bestCmd);
-			state.setTokenCount(tokenCount);
-			state.setSuccess(FALSE);
-			return state;
+			var/Matcher/bestMatcher = src._selectWinner(winners);
+			if(!bestMatcher) bestMatcher = leadingMatcher;
+
+			var/ParserOutput/out = new();
+			if(bestMatcher._isSuccessful()) {
+				bestMatcher._parent._go(c, bestMatcher);
+				out.setSuccess(TRUE);
+			} else {
+				out.setSuccess(FALSE);
+			}
+			out.setMatcher(bestMatcher);
+			postprocess(c, str, bestMatcher);
+			return out;
+		}
+
+		_selectWinner(list/winners) {
+			var/Matcher/strongest;
+			for(var/Matcher/matcher in winners) {
+				if(!strongest || matcher._getFirstMatchStrength() > strongest._getFirstMatchStrength()) {
+					strongest = matcher;
+				}
+			}
+			return strongest;
 		}

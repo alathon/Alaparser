@@ -1,4 +1,4 @@
-MatchResult
+ComponentResult
 	var
 		_success = FALSE;
 		_value = null;

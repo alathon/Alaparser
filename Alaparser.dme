@@ -7,12 +7,6 @@
 
 // BEGIN_FILE_DIR
 #define FILE_DIR .
-#define FILE_DIR "commands"
-#define FILE_DIR "demo"
-#define FILE_DIR "impl"
-#define FILE_DIR "matching"
-#define FILE_DIR "options"
-#define FILE_DIR "parsing"
 // END_FILE_DIR
 
 // BEGIN_PREFERENCES
@@ -20,15 +14,16 @@
 // END_PREFERENCES
 
 // BEGIN_INCLUDE
+#include "readme.dm"
 #include "utility.dm"
 #include "commands\Command.dm"
 #include "impl\Alaparser.dm"
 #include "impl\atom.dm"
 #include "impl\Components.dm"
 #include "matching\ComponentGenerator.dm"
+#include "matching\ComponentResult.dm"
 #include "matching\Matcher.dm"
 #include "matching\MatcherComponent.dm"
-#include "matching\MatchResult.dm"
 #include "options\Option.dm"
 #include "options\OptionParser.dm"
 #include "parsing\Parser.dm"

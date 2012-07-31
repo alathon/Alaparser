@@ -6,21 +6,21 @@ MatcherComponent
 	var
 		list/_options = new /list();
 		_name;
-		_required = TRUE;
+		ComponentResult/_result;
 
 	proc
 		_success(count, value) {
-			var/MatchResult/result = new();
-			result.setTokenCount(count);
-			result.setValue(value);
-			result.setSuccess(TRUE);
-			return result;
+			_result = new();
+			_result.setTokenCount(count);
+			_result.setValue(value);
+			_result.setSuccess(TRUE);
+			return TRUE;
 		}
 
 		_failure() {
-			var/MatchResult/result = new();
-			result.setSuccess(FALSE);
-			return result;
+			_result = new();
+			_result.setSuccess(FALSE);
+			return FALSE;
 		}
 
 		_isCaseSensitive() {
@@ -43,6 +43,18 @@ MatcherComponent
 				return TRUE;
 			}
 			return FALSE;
+		}
+
+		isSuccessful() {
+			return src._result.isSuccessful();
+		}
+
+		getTokenCount() {
+			return src._result.getTokenCount();
+		}
+
+		getValue() {
+			return src._result.getValue();
 		}
 
 		getName() {

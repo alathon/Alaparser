@@ -4,7 +4,7 @@ OptionParser
 			var/i = 1;
 			while(length(str)) {
 				var/next = copytext(str, i, i+1);
-				var/Option/opt = _getPrefixOption(next);
+				var/Option/opt = src._getPrefixOption(next);
 				if(opt == null) break;
 				else L += opt;
 				if(++i > length(str)) break;
@@ -25,8 +25,8 @@ OptionParser
 
 		parse(str) {
 			. = new /list();
-			_parsePrefix(., str);
-			_parsePostfix(., str);
+			src._parsePrefix(., str);
+			src._parsePostfix(., str);
 			world << "Parsing [str] gave the following options:";
 			for(var/Option/O in .) {
 				world << "[O]";

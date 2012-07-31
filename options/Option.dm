@@ -9,7 +9,7 @@ Option/postfix/range
 		_filterList(list/L) {
 			. = new /list();
 			for(var/entry in L) {
-				if(_isCorrectType(entry)) . += entry;
+				if(src._isCorrectType(entry)) . += entry;
 			}
 		}
 
@@ -42,7 +42,7 @@ Option/postfix/range
 			}
 		}
 
-		getPossibles(client/C) {
+		_getPossibles(client/C) {
 			. = getListFromKey(C);
 			. = _filterList(.);
 		}

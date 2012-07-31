@@ -4,7 +4,7 @@ Command
 
 		if(!src.format) return;
 
-		if(_auto_create == TRUE) {
+		if(src._auto_create == TRUE) {
 			src._setComponents(alaparser.generator._fromCommand(src));
 		}
 	}
@@ -39,6 +39,6 @@ Command
 			CRASH("Command.command() default called. [src.type] must override command()!")
 		}
 
-		getAutoCreate() {
+		_getAutoCreate() {
 			return _auto_create;
 		}

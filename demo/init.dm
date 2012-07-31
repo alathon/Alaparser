@@ -30,7 +30,7 @@ proc/generateComponents() {
 	mainParser = new /Parser();
 	for(var/p in typesof(/Command)-/Command) {
 		var/Command/cmd = new p();
-		if(!cmd.getAutoCreate() || !cmd.format) {
+		if(!cmd._getAutoCreate() || !cmd.format) {
 			del cmd;
 		} else {
 			mainParser.addCommand(cmd);
