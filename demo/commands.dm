@@ -104,3 +104,11 @@ Command
 				M.describe(C);
 			}
 		}
+
+	/* Other tests */
+	literaltest
+		format = "'num';";
+
+		command(client/C) {
+			C << "It worked! You can type num!";
+		}

@@ -27,10 +27,6 @@ OptionParser
 			. = new /list();
 			src._parsePrefix(., str);
 			src._parsePostfix(., str);
-			world << "Parsing [str] gave the following options:";
-			for(var/Option/O in .) {
-				world << "[O]";
-			}
 		}
 
 		_getPrefixOption(t) {

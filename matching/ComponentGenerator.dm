@@ -53,11 +53,17 @@ ComponentGenerator
 			return alaparser.optionParser.parse(entry);
 		}
 
+		_stripForLiteral(name) {
+			var/first = findtext(name, "'");
+			if(first == 0) return name;
+			else return copytext(name, 1, first);
+		}
+
 		getMatcher(name, list/opts) {
 			if(name in src._componentTypes) {
 				var/path = src._componentTypes[name];
 				return new path(opts);
 			} else {
-				return new /MatcherComponent/literal(name, opts);
+				return new /MatcherComponent/literal(_stripForLiteral(name), opts);
 			}
 		}
