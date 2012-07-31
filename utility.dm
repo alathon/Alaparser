@@ -33,7 +33,8 @@ proc/__listToText(list/L, delim = ";", skip_empty = TRUE) {
 			. = "[.][entry][delim]";
 		}
 	}
-	if(skip_empty != FALSE) . = copytext(., 1, -(length(delim)));
+
+	if(skip_empty != FALSE) . = copytext(., 1, length(.) - length(delim) + 1);
 }
 
 proc/__replaceText(str, replace, with) {

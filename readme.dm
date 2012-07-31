@@ -111,14 +111,23 @@ to make things optional(?), allow partial matches (~), force a value to get sent
 How does Search Work|
 ---------------------
 
-The 'search' match type is /MatcherComponent/search, and utilizes a special option called /Option/postfix/range, which is what you can see
-inside the () braces, telling it where to look and what to look for. In order to add new places to look besides the two pre-defined 'clients' and 'loc',
-you must override Option/postfix/range.getListFromKey(client/C), to return the appropriate list based on the _key value of the option. See the existing
-implementation for an example of how to do that.
+Search is meant to identify a datum, of a specific type, found in a specific place. The format is search(type@place).
 
-The basic format of the range option after the search keyword is (type@key) where key must be matched in getListFromKey(), and type must be a valid type-path,
-without the initial /. If you only wanted to search for /mob/evil f.ex, you could use mob/evil as the type.
+The place part is a keyword, which must be one of the potential values that is considered by /Option/postfix/range.getListFromKey(client).
+This means that in order to add more 'place' values (Say you wanted a 'group' place, which would return the list of people in your group),
+you must override getListFromKey() to take that into account. See the demo override in demo/rangeOption.dm for an example.
 
+The type is any valid DM type-path, without the initial slash(/). So mob for /mob, mob/evil for /mob/evil, etc.
+
+Based upon the list provided by getListFromKey(), the list first has any type not matching the type specified removed. Then each entry in that
+list is attempted matched against a single word input from the client. This is done by retrieving a list of keywords that represent that entry,
+by calling entry.getMatchKeywords(). For each of the keywords returned by that proc, a text match is attempted. The partial(~) and case-sensitive(%)
+option prefixes are respected here; so ~search will allow you to match based on the partial keyword of a datum, while %search will require that you get
+the case correct.
+
+You may also provide more than one type, if you separate them with the pipe(|) symbol. Such as:
+
+search(mob|obj|turf|area@world)
 
 Things of note|
 ---------------
