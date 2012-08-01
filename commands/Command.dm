@@ -4,10 +4,7 @@ Command
 		format = __replaceText(format," ","");
 
 		if(!src.format) return;
-
-		if(src._auto_create == TRUE) {
-			src._setComponents(alaparser.generator._fromCommand(src));
-		}
+		src._setComponents(alaparser.generator._fromCommand(src));
 	}
 
 	var

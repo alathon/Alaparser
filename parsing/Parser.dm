@@ -1,5 +1,3 @@
-var/const/PARSE_SUCCESS = -1;
-
 Parser
 	var
 		list/commands = new /list();
@@ -20,18 +18,17 @@ Parser
 		postprocess(client/c, str, Matcher/match) {
 		}
 
-		process(client/c, str) {
+		process(client/c, str, list/commands) {
 			if(!src.preprocess(c,str)) {
-				var/ParserOutput/out = new();
-				out.setSuccess(FALSE);
-				return out;
+				return null;
 			}
 
 			var/list/tokens = src._tokenize(str);
 			var/Matcher/leadingMatcher;
 			var/list/winners = new /list();
 
-			for(var/Command/cmd in commands) {
+			for(var/entry in commands) {
+				var/Command/cmd = commands[entry];
 				var/ParserInput/clientInput = new /ParserInput(str, tokens.Copy(), c);
 				var/Matcher/matcher = new /Matcher(cmd, clientInput);
 				if(matcher._match()) {
@@ -47,16 +44,18 @@ Parser
 			if(!bestMatcher) bestMatcher = leadingMatcher;
 
 			var/ParserOutput/out = new();
+
 			var/Command/cmd = bestMatcher.getCommand();
-			if(bestMatcher._isSuccessful() && cmd.preprocess(c)) {
-				bestMatcher._parent._go(c, bestMatcher);
-				out.setSuccess(TRUE);
-			} else {
-				out.setSuccess(FALSE);
+			if(bestMatcher._isSuccessful()) {
+				out.setMatchSuccess(TRUE);
+				if(cmd.preprocess(c)) {
+					bestMatcher._parent._go(c, bestMatcher);
+					cmd.postprocess(c);
+					src.postprocess(c, str, bestMatcher);
+					out.setCommandSuccess(TRUE);
+				}
 			}
 			out.setMatcher(bestMatcher);
-			cmd.postprocess(c);
-			src.postprocess(c, str, bestMatcher);
 			return out;
 		}
 

@@ -50,6 +50,7 @@ Command
 
 	/* Random stuff */
 	tattoo
+		level_req = 5
 		format = "tattoo; word; ?on; ?word"
 
 		command(client/C, text, place) {
@@ -72,6 +73,8 @@ Command
 			} else {
 				C << "You jump...";
 			}
+			C.level += max(1,num);
+			C << "You level up [num] time[num > 1 ? "s":""] from jumping so much! You are now level [C.level]";
 		}
 
 	/* Information */

@@ -18,6 +18,8 @@ mob/Logout() {
 	. = ..();
 }
 
+client/var/level = 1;
+
 /*
 
 Lets create 3 mobs (two with identical names),

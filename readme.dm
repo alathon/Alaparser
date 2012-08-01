@@ -122,6 +122,10 @@ without the initial /. If you only wanted to search for /mob/evil f.ex, you coul
 
 Things of note|
 ---------------
+- If you need to define a literal using one of the protected component names (num, any, word, search f.ex), you can do so by
+surrounding it with 's. Such as: format = "'num'" will allow you to type num to run the command, instead of interpreting it as
+a num argument.
+
 - The parser doesn't explicitly expect the first matcher component of a command to be a literal, but it probably should be. When deciding between commands that all match
 the input, it will prioritize non-first literals, or commands that don't have a partial first literal (A literal with a ~). If no match can be found like that,
 it will pick the shortest first-literal matched.
@@ -136,6 +140,9 @@ overriding Matcher.getIgnoredValueTypes(). The procedure will return a list with
 default.
 
 - In general, proc names prefixed by a _ shouldn't be overridden / used by you, and are internal to the library.
+
+- To run f.ex a check on level or similar, you can override Command/preprocess(client/C). Returning FALSE here denies
+running the command.
 
 Documentation TODO:
 
