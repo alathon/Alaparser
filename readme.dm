@@ -23,24 +23,21 @@ What is a parser in this case?|
 -------------------------
 
 A Parser in this library is a datum that can receive input from a client, and will look for viable commands that match
-the input. If it finds one, it will execute the command. Adding commands to a parser is much the same as adding verbs to
-a mob, in that if you don't add a command to a parser, it won't be able to run that command. You can also have any number
-of parsers, and you can attach them to players, or have them be globally accessible, or what have you.
+the input. If it finds one, it will execute the command. The parser accepts a list of commands to try matching, allowing you
+to add commands to the list supplied depending on the situation. This means you can f.ex have objs or rooms supply extra commands
+that are only available around them. The general usecase is to utilize the global parser 'alaparser', which you should initialize
+on world/New() or somewhere else appropriate, by calling alaparser = new().
 
-The demo provided has a single global parser with all commands available created automatically. This is one way of doing
-things.
+The demo provided demonstrates how to f.ex get rooms to add available commands when you're in them. Try 'clap' in room one, and
+'zap' a mob in room two.
 
 How do I set up the library to work?|
 -------------------------------------
 
 You must send input to a parser. This requires three things:
 
-1) You've created one or more Parser objects.
-2) You've added one or more Command objects to that/those parsers.
-3) You've captured player input somewhere, that you can send to the Parser.process(client, text) proc.
-
-In the demo, the last part is done in init.dm under client/Command(), while a Parser and all available
-commands are created during world/New().
+1) You've initialized the Alaparser via alaparser = new();
+2) You've captured player input somewhere, that you can send to alaparser.parse(client, text, additional_commands) proc.
 
 Once this is done, you're good to go, assuming you've defined some commands.
 

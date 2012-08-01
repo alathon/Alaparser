@@ -18,9 +18,11 @@ room
 	New() {
 		if(east) east = locate(east);
 		if(west) west = locate(west);
+
 		while(alaparser == null || alaparser.generator == null) {
 			sleep(5);
 		}
+
 		if(commands && length(commands)) {
 			var/list/paths = commands.Copy();
 			commands.Cut();
