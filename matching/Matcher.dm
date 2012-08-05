@@ -1,13 +1,15 @@
 Matcher
 	New(Command/cmd, ParserInput/inp) {
-		src._matchers = cmd._getComponents();
+		src._matchers = list(cmd._getFirstComponent());
 		src._values = new /list();
 		src._parent = cmd;
 		src._clientInput = inp;
+		src._ignoredValueTypes = src.getIgnoredValueTypes();
 	}
 
 	var
 		list/_matchers;
+		list/_ignoredValueTypes;
 		_tokensMatched = 0;
 		_success = FALSE;
 		list/_values;
@@ -31,7 +33,7 @@ Matcher
 
 		_includeValue(MatcherComponent/comp) {
 			if(comp._isForcedValue()) return TRUE;
-			if(comp.type in getIgnoredValueTypes()) return FALSE;
+			if(comp.type in src._ignoredValueTypes) return FALSE;
 			return TRUE;
 		}
 
@@ -58,6 +60,7 @@ Matcher
 			return (src._clientInput.getTokens() && length(src._clientInput.getTokens()));
 		}
 
+
 		_match() {
 			for(var/i = 1; i <= length(_matchers); i++) {
 				var/MatcherComponent/comp = _matchers[i];
@@ -66,6 +69,7 @@ Matcher
 						return FALSE;
 					} else {
 						_addValue(null);
+						if(i == 1) _matchers = _parent._getComponents();
 						continue;
 					}
 				}
@@ -76,11 +80,13 @@ Matcher
 						return FALSE;
 					} else {
 						_addValue(null);
+						if(i == 1) _matchers = _parent._getComponents();
 						continue;
 					}
 				} else {
 					if(_includeValue(comp)) _addValue(comp.getValue());
 					_consumeTokens(comp.getTokenCount());
+					if(i == 1) _matchers = _parent._getComponents();
 				}
 
 			}

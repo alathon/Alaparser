@@ -1,3 +1,4 @@
+
 Command
 	/* Movement */
 	east
@@ -34,6 +35,8 @@ Command
 			C.mob.loc.contents - C.mob << "[C] says, '[txt]'";
 			C << "You say, '[txt]'"
 		}
+
+
 
 	tell
 		format = "tell; %search(client@clients); any";

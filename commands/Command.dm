@@ -33,6 +33,10 @@ Command
 			src._components = L;
 		}
 
+		_getFirstComponent() {
+			return _components[1];
+		}
+
 		_getComponents() {
 			. = new /list();
 			for(var/MatcherComponent/comp in _components) {

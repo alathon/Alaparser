@@ -10,13 +10,13 @@
 // END_FILE_DIR
 
 // BEGIN_PREFERENCES
+#define DEBUG
 // END_PREFERENCES
 
 // BEGIN_INCLUDE
 #include "readme.dm"
 #include "utility.dm"
 #include "commands\Command.dm"
-#include "demo\readme.dm"
 #include "impl\Alaparser.dm"
 #include "impl\atom.dm"
 #include "impl\Components.dm"
