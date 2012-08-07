@@ -35,5 +35,4 @@ world/New() {
 	One.name = "One";
 	SecondOne.name = "One";
 	Two.name = "Two";
-	alaparser = new();
 }

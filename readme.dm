@@ -34,10 +34,13 @@ The demo provided demonstrates how to f.ex get rooms to add available commands w
 How do I set up the library to work?|
 -------------------------------------
 
-You must send input to a parser. This requires three things:
+You must send input to a Parser. The easiest way to 'just get going' is
+to use the standard 'alaparser' object, which the library defines and creates
+for you. You will need to send client input to alaparser.parse(client, text).
 
-1) You've initialized the Alaparser via alaparser = new();
-2) You've captured player input somewhere, that you can send to alaparser.parse(client, text, additional_commands) proc.
+Any text sent by a client which is *not* caught by a verb, will be sent to client/Command().
+As such, you can capture client input in client/Command() and send it to the parser. See demo/parser.dm
+for clarification.
 
 Once this is done, you're good to go, assuming you've defined some commands.
 

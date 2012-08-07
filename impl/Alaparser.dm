@@ -1,4 +1,4 @@
-var/Alaparser/alaparser;
+var/Alaparser/alaparser = new();
 
 Alaparser
 	New(mainParser = TRUE, base_type = /Command) {
@@ -10,8 +10,9 @@ Alaparser
 
 	proc
 		parse(client/C, str, list/add) {
+			if(!add) add = list();
 			var/list/total = new();
-			for(var/a in commands + add) {
+			for(var/a in commands) {
 				total[a] = commands[a];
 			}
 			for(var/a in add) {
@@ -31,9 +32,11 @@ Alaparser
 					commands["[cmd]"] = cmd;
 				}
 			}
+			ready = TRUE;
 		}
 
 	var
+		ready = FALSE;
 		list/commands;
 		Parser/parser;
 		ComponentGenerator/generator
