@@ -34,7 +34,7 @@ Command
 		command(client/C, at, mob/M) {
 			if(!M) {
 				if(at) {
-					C << "Look at what?";
+					C \<\< "Look at what?";
 					return;
 				}
 
