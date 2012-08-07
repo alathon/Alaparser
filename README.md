@@ -26,7 +26,7 @@ to be fixed, as both of those users are long gone.
 
 Example anatomy of a command
 ----------------------------
-<pre>
+<blockquote>
 Command
 	look
 		format = "~look; ?!at; ?~search(mob@loc)";
@@ -34,7 +34,7 @@ Command
 		command(client/C, at, mob/M) {
 			if(!M) {
 				if(at) {
-					C `<<` "Look at what?";
+					C << "Look at what?";
 					return;
 				}
 
@@ -46,7 +46,7 @@ Command
 				M.describe(C);
 			}
 		}
-</pre>
+</blockquote>
 
 This command defines a standard 'look' command on a MUD, where you can either look
 at the room (By typing just 'look'), or look at a mob in the room; and optionally, you
