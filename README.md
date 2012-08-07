@@ -63,6 +63,9 @@ The force(!) forces a value that otherwise wouldn't get sent to command(), to do
 default, never sent to command(). But in this case we force the match of 'at' to get sent, so we know
 whether the player typed 'look at', which we want to handle as a special-case.
 
+Finally, the command-part type search does what it sounds like - It searches for a reference to something.
+In this case, it will look for a /mob in 'loc', which is pre-defined to mean the current location of the user.
+
 Documentation
 -------------
 Documentation is 'on-going'. There is a fairly comprehensive demo as part of the library, that showcases
