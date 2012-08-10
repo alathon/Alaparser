@@ -13,15 +13,15 @@ Command
 		list/_components;
 
 	proc
-		preprocess(client/C) {
+		preprocess(mob/M) {
 			return TRUE;
 		}
 
-		postprocess(client/C) {
+		postprocess(mob/M) {
 		}
 
-		_go(client/C, var/Matcher/match) {
-			var/list/arguments = list(C) + match._getValues();
+		_go(mob/M, var/Matcher/match) {
+			var/list/arguments = list(M) + match._getValues();
 			if(length(arguments) > 0) {
 				call(src,"command")(arglist(arguments));
 			} else {

@@ -11,15 +11,15 @@ Parser
 			commands += C;
 		}
 
-		preprocess(client/c, str) {
+		preprocess(mob/user, str) {
 			return TRUE;
 		}
 
-		postprocess(client/c, str, Matcher/match) {
+		postprocess(mob/user, str, Matcher/match) {
 		}
 
-		process(client/c, str, list/commands) {
-			if(!src.preprocess(c,str)) {
+		process(mob/user, str, list/commands) {
+			if(!src.preprocess(user,str)) {
 				return null;
 			}
 
@@ -29,8 +29,8 @@ Parser
 
 			for(var/entry in commands) {
 				var/Command/cmd = commands[entry];
-				var/ParserInput/clientInput = new /ParserInput(str, tokens.Copy(), c);
-				var/Matcher/matcher = new /Matcher(cmd, clientInput);
+				var/ParserInput/userInput = new /ParserInput(str, tokens.Copy(), user);
+				var/Matcher/matcher = new /Matcher(cmd, userInput);
 				if(matcher._match()) {
 					winners += matcher;
 				} else {
@@ -48,10 +48,10 @@ Parser
 			var/Command/cmd = bestMatcher.getCommand();
 			if(bestMatcher._isSuccessful()) {
 				out.setMatchSuccess(TRUE);
-				if(cmd.preprocess(c)) {
-					bestMatcher._parent._go(c, bestMatcher);
-					cmd.postprocess(c);
-					src.postprocess(c, str, bestMatcher);
+				if(cmd.preprocess(user)) {
+					bestMatcher._parent._go(user, bestMatcher);
+					cmd.postprocess(user);
+					src.postprocess(user, str, bestMatcher);
 					out.setCommandSuccess(TRUE);
 				}
 			}

@@ -8,7 +8,7 @@ ParserInput
 	var
 		_rawText;
 		list/_tokens;
-		client/_source
+		mob/_source
 
 	proc
 		getText() {
