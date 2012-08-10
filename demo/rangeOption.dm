@@ -6,14 +6,14 @@ We also provide 'room' to be the same thing as 'loc'.
 
 */
 Option/postfix/range
-	getListFromKey(client/C) {
+	getListFromKey(mob/user) {
 		. = new /list();
 		switch(_key) {
 			if("clients") {
 				for(var/client/cli in clients) . += cli;
 			}
 			if("loc","room") {
-				for(var/atom/A in C.mob.loc) . += A;
+				for(var/atom/A in user.loc) . += A;
 			}
 			if("world") {
 				for(var/mob/M in world) . += M;

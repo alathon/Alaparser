@@ -1,39 +1,39 @@
 
-Command
+userommand
 	/* Movement */
 	east
 		format = "~east";
 
-		command(client/C) {
-			var/room/curLoc = C.mob.loc;
+		command(mob/user) {
+			var/room/curLoc = user.loc;
 			if(curLoc.east != null) {
-				C << "You move east.";
-				C.mob.Move(curLoc.east);
+				user << "You move east.";
+				user.Move(curLoc.east);
 			} else {
-				C << "You can't go east here.";
+				user << "You can't go east here.";
 			}
 		}
 
 	west
 		format = "~west";
 
-		command(client/C) {
-			var/room/curLoc = C.mob.loc;
+		command(mob/user) {
+			var/room/curLoc = user.loc;
 			if(curLoc.west != null) {
-				C << "You move west.";
-				C.mob.Move(curLoc.west);
+				user << "You move west.";
+				user.Move(curLoc.west);
 			} else {
-				C << "You can't go west here.";
+				user << "You can't go west here.";
 			}
 		}
 
-	/* Communication */
+	/* userommunication */
 	say
 		format = "say; any;"
 
-		command(client/C, txt) {
-			C.mob.loc.contents - C.mob << "[C] says, '[txt]'";
-			C << "You say, '[txt]'"
+		command(mob/user, txt) {
+			user.loc.contents - user << "[user] says, '[txt]'";
+			user << "You say, '[txt]'"
 		}
 
 
@@ -41,14 +41,14 @@ Command
 	tell
 		format = "tell; %search(client@clients); any";
 
-		command(client/C, client/target, txt) {
-			if(target == C) {
-				C << "You tell yourself (Weirdo), '[txt]'";
+		command(mob/user, client/target, txt) {
+			if(target == user) {
+				user << "You tell yourself (Weirdo), '[txt]'";
 				return;
 			}
 
-			target << "[C] tells you, '[txt]'"
-			C << "You tell [target], '[txt]'"
+			target << "[user] tells you, '[txt]'"
+			user << "You tell [target], '[txt]'"
 		}
 
 	/* Random stuff */
@@ -56,7 +56,7 @@ Command
 		level_req = 5
 		format = "tattoo; word; ?on; ?word"
 
-		command(client/C, text, place) {
+		command(mob/user, text, place) {
 			if(!place) {
 				switch(rand(1,3)) {
 					if(1) place = "arm";
@@ -64,50 +64,50 @@ Command
 					if(3) place = "spine";
 				}
 			}
-			C << "You tattoo [text] on your [place]";
+			user << "You tattoo [text] on your [place]";
 		}
 
 	jump
 		format = "jump; ?!num; ?times"
 
-		command(client/C, num) {
+		command(mob/user, num) {
 			if(num) {
-				C << "You jump [num] times!";
+				user << "You jump [num] times!";
 			} else {
-				C << "You jump...";
+				user << "You jump...";
 			}
-			C.level += max(1,num);
-			C << "You level up [num] time[num > 1 ? "s":""] from jumping so much! You are now level [C.level]";
+			user.client.level += max(1,num);
+			user << "You level up [num] time[num > 1 ? "s":""] from jumping so much! You are now level [user.level]";
 		}
 
 	/* Information */
 	who
 		format = "who";
 
-		command(client/C) {
-			C << "----------\n";
+		command(mob/user) {
+			user << "----------\n";
 			for(var/client/other) {
-				C << other.mob
+				user << other.mob
 			}
-			C << "----------\n";
+			user << "----------\n";
 		}
 
 	look
 		format = "~look; ?!at; ?~search(mob@loc)";
 
-		command(client/C, at, mob/M) {
+		command(mob/user, at, mob/M) {
 			if(!M) {
 				if(at) {
-					C << "Look at what?";
+					user << "Look at what?";
 					return;
 				}
 
-				if(istype(C.mob.loc, /room)) {
-					var/room/R = C.mob.loc;
-					R.describe(C);
+				if(istype(user.loc, /room)) {
+					var/room/R = user.loc;
+					R.describe(user);
 				}
 			} else {
-				M.describe(C);
+				M.describe(user);
 			}
 		}
 
@@ -115,6 +115,6 @@ Command
 	literaltest
 		format = "'num';";
 
-		command(client/C) {
-			C << "It worked! You can type num!";
+		command(mob/user) {
+			user << "It worked! You can type num!";
 		}

@@ -30,19 +30,19 @@ Example anatomy of a command
 		look
 			format = "~look; ?!at; ?~search(mob@loc)";
 
-			command(client/C, at, mob/M) {
+			command(mob/user, at, mob/M) {
 				if(!M) {
 					if(at) {
-						C << "Look at what?";
+						user << "Look at what?";
 						return;
 					}
 
-					if(istype(C.mob.loc, /room)) {
-						var/room/R = C.mob.loc;
-						R.describe(C);
+					if(istype(user.loc, /room)) {
+						var/room/R = user.loc;
+						R.describe(user);
 					}
 				} else {
-					M.describe(C);
+					M.describe(user);
 				}
 			}
 

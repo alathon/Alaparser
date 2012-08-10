@@ -71,16 +71,16 @@ Command/rooms
 	clap
 		format = "clap";
 
-		command(client/C) {
-			C << "You clap your hands!";
-			C.mob.loc.contents - C.mob << "[C] claps their hands!";
+		command(mob/user) {
+			user << "You clap your hands!";
+			user.loc.contents - user << "[user] claps their hands!";
 		}
 
 	zap
 		format = "zap; ~search(mob@loc)";
 
-		command(client/C, mob/M) {
-			C << "You zap [M]";
-			M << "[C] zaps you";
-			C.mob.loc.contents - C.mob - M << "[C] zaps [M]";
+		command(mob/user, mob/M) {
+			user << "You zap [M]";
+			M << "[user] zaps you";
+			user.loc.contents - user - M << "[user] zaps [M]";
 		}

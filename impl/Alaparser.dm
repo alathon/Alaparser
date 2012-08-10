@@ -9,7 +9,7 @@ Alaparser
 	}
 
 	proc
-		parse(client/C, str, list/add) {
+		parse(mob/user, str, list/add) {
 			if(!add) add = list();
 			var/list/total = new();
 			for(var/a in commands) {
@@ -18,7 +18,7 @@ Alaparser
 			for(var/a in add) {
 				total[a] = add[a];
 			}
-			return parser.process(C, str, total);
+			return parser.process(user, str, total);
 		}
 
 		_createMainParser(base_type) {

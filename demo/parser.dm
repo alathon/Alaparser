@@ -11,7 +11,7 @@ client/Command(T) {
 		var/room/R = mob.loc;
 		extras = R.getRoomCommands();
 	}
-	var/ParserOutput/out = alaparser.parse(src, T, extras);
+	var/ParserOutput/out = alaparser.parse(src.mob, T, extras);
 	if(!out.getMatchSuccess()) {
 		src << "Huh?";
 	}
@@ -21,9 +21,9 @@ Command
 	var
 		level_req = 1;
 
-	preprocess(client/C) {
-		if(level_req > C.level) {
-			C << "You aren't high enough level!";
+	preprocess(mob/user) {
+		if(level_req > user.client.level) {
+			user << "You aren't high enough level!";
 			return FALSE;
 		}
 		return TRUE;
