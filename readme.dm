@@ -36,7 +36,7 @@ How do I set up the library to work?|
 
 You must send input to a Parser. The easiest way to 'just get going' is
 to use the standard 'alaparser' object, which the library defines and creates
-for you. You will need to send client input to alaparser.parse(client, text).
+for you. You will need to send client input to alaparser.parse(mob, text).
 
 Any text sent by a client which is *not* caught by a verb, will be sent to client/Command().
 As such, you can capture client input in client/Command() and send it to the parser. See demo/parser.dm
@@ -61,12 +61,12 @@ Command
 	who
 		format = "~who";
 
-		command(client/C) {
-			C << "----------\n";
+		command(mob/user) {
+			user << "----------\n";
 			for(var/client/other) {
-				C << other.mob
+				user << other.mob
 			}
-			C << "----------\n";
+			user << "----------\n";
 		}
 
 Here, we specify that in order to call the who command, you must type in 'who'.
@@ -74,7 +74,7 @@ Anything not a special keyword is considered a 'text literal' by the Parser, whi
 means you have to type that word for it to match. In addition, because we specified
 the ~ prefix option (Called the partial option), we could also type 'w', or 'wh'.
 
-The command() proc is always passed the calling client as the first argument. Normally,
+The command() proc is always passed the calling user as the first argument. Normally,
 every part of a command is sent to the command() proc as an argument, but by default
 literals (Such as the above) are not.
 
@@ -84,14 +84,14 @@ Command
 	look
 		format = "~look; ?~search(mob@loc)";
 
-		command(client/C, mob/M) {
+		command(mob/user, mob/M) {
 			if(!M) {
-				if(istype(C.mob.loc, /room)) {
-					var/room/R = C.mob.loc;
-					R.describe(C);
+				if(istype(user.loc, /room)) {
+					var/room/R = user.loc;
+					R.describe(user);
 				}
 			} else {
-				M.describe(C);
+				M.describe(user);
 			}
 		}
 
@@ -113,7 +113,7 @@ How does Search Work|
 
 The 'search' match type is /MatcherComponent/search, and utilizes a special option called /Option/postfix/range, which is what you can see
 inside the () braces, telling it where to look and what to look for. In order to add new places to look besides the two pre-defined 'clients' and 'loc',
-you must override Option/postfix/range.getListFromKey(client/C), to return the appropriate list based on the _key value of the option. See the existing
+you must override Option/postfix/range.getListFromKey(mob/user), to return the appropriate list based on the _key value of the option. See the existing
 implementation for an example of how to do that.
 
 The basic format of the range option after the search keyword is (type@key) where key must be matched in getListFromKey(), and type must be a valid type-path,
@@ -141,7 +141,7 @@ default.
 
 - In general, proc names prefixed by a _ shouldn't be overridden / used by you, and are internal to the library.
 
-- To run f.ex a check on level or similar, you can override Command/preprocess(client/C). Returning FALSE here denies
+- To run f.ex a check on level or similar, you can override Command/preprocess(mob/user). Returning FALSE here denies
 running the command.
 
 Documentation TODO:
