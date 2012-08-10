@@ -1,5 +1,5 @@
 
-userommand
+Command
 	/* Movement */
 	east
 		format = "~east";
@@ -77,7 +77,7 @@ userommand
 				user << "You jump...";
 			}
 			user.client.level += max(1,num);
-			user << "You level up [num] time[num > 1 ? "s":""] from jumping so much! You are now level [user.level]";
+			user << "You level up [num] time[num > 1 ? "s":""] from jumping so much! You are now level [user.client.level]";
 		}
 
 	/* Information */
