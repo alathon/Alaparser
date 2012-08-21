@@ -108,6 +108,10 @@ current location, to look at that thing. More on search under 'How does Search w
 The demo provides uses of each special match type (num, any, word, search), and demonstrates all of the prefix symbols that allow you
 to make things optional(?), allow partial matches (~), force a value to get sent to command(!) and force a case-sensitive match (%).
 
+In addition, it also shows a single use of the multiple-choice pipe(|), which allows you to define multiple different component parts that
+will try to match for the same slot. For example: format = "~look | ~gaze | ~eye; ?~search(mob@loc)" will allow look, gaze and eye to all
+function as the initial literal in the 'look' command.
+
 How does Search Work|
 ---------------------
 

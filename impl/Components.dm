@@ -4,6 +4,11 @@ MatcherComponent
 
         var
             list/_components = list();
+            MatcherComponent/_winner;
+
+        _getType() {
+            return _winner.type;
+        }
 
         clone() {
             var/p = src.type;
@@ -16,6 +21,7 @@ MatcherComponent
             for(var/MatcherComponent/comp in src._components) {
                 if(comp.match(inp)) {
                     src._result = comp._result;
+                    src._winner = comp;
                     return TRUE;
                 }
             }

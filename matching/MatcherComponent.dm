@@ -9,6 +9,10 @@ MatcherComponent
 		ComponentResult/_result;
 
 	proc
+		_getType() {
+			return src.type;
+		}
+
 		_success(count, value) {
 			_result = new();
 			_result.setTokenCount(count);

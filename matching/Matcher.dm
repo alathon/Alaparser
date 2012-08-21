@@ -33,7 +33,7 @@ Matcher
 
 		_includeValue(MatcherComponent/comp) {
 			if(comp._isForcedValue()) return TRUE;
-			if(comp.type in src._ignoredValueTypes) return FALSE;
+			if(comp._getType() in src._ignoredValueTypes) return FALSE;
 			return TRUE;
 		}
 

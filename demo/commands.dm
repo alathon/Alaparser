@@ -100,7 +100,7 @@ Command
         }
 
     look
-        format = "~look; ?!at; ?~search(mob@loc)";
+        format = "~look | ~gaze | ~eye; ?!at; ?~search(mob@loc)";
 
         command(mob/user, at, mob/M) {
             if(!M) {
