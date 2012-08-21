@@ -1,4 +1,27 @@
 MatcherComponent
+    multi
+        _name = "__multi__";
+
+        var
+            list/_components = list();
+
+        clone() {
+            var/p = src.type;
+            var/MatcherComponent/multi/other = new p();
+            other._components = src._components.Copy();
+            return other;
+        }
+
+        match(ParserInput/inp) {
+            for(var/MatcherComponent/comp in src._components) {
+                if(comp.match(inp)) {
+                    src._result = comp._result;
+                    return TRUE;
+                }
+            }
+            return src._failure();
+        }
+
     any
         _name = "any";
         match(ParserInput/inp) {
@@ -34,7 +57,7 @@ MatcherComponent
             ..(opts);
         }
 
-        _name = "literal";
+        _name = "__literal__";
         var
             word
 
