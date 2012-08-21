@@ -1,10 +1,10 @@
 
 Command
     testmulti
-        format = "hi|ho";
+        format = "!hi|!ho; jello";
 
-        command(mob/user) {
-            user << "Wuhu!";
+        command(mob/user, test) {
+            user << "Wuhu! [test]";
         }
 
     /* Movement */

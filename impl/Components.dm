@@ -20,6 +20,7 @@ MatcherComponent
         match(ParserInput/inp) {
             for(var/MatcherComponent/comp in src._components) {
                 if(comp.match(inp)) {
+                    src._options = comp._options;
                     src._result = comp._result;
                     src._winner = comp;
                     return TRUE;
